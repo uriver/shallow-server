@@ -1,0 +1,14 @@
+{
+  "name": "shallow-server",
+  "version": "1.0.0",
+  "description": "www.shallownight.com server.",
+  "main": "index.js",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yuchuan Jiang",
+  "license": "MIT"
+}
