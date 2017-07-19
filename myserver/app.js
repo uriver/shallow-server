@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var db = require("./model/connect.js");
+
 var app = express();
 
 // view engine setup
@@ -41,6 +43,12 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+db.connect().then(function(db){
+     global.db = db;
+}).catch(function(err){
+    console.log(err);
 });
 
 module.exports = app;
