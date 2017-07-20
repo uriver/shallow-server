@@ -95,9 +95,9 @@ router.post("/sub-article",function(req,res){
     messageColletion.insertOne({    //数据库插入数据
         title:message.title,
         time:newTime,
-        cateID:message.categroy,
+        cateID:message.cateID,
         description:message.description,
-        content:message.value,
+        content:message.content,
     })
         .then(function(){
             res.json({      //返回json数据
@@ -109,5 +109,17 @@ router.post("/sub-article",function(req,res){
             throw err;
         })
 })
+
+router.get('/get-article', function(req, res) {
+  let myDB = db.collection("article");	
+  myDB.find().toArray()
+    .then(function(result) {
+      res.send(result);	
+    })
+    .catch(function(err){
+      throw err;
+    });
+});
+
 
 module.exports = router;

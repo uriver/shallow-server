@@ -1,6 +1,6 @@
 <template>
 	<div id="main">
-    	<mavon-editor class="set" v-model="value"></mavon-editor>
+    	<mavon-editor class="set" v-model="value" @change="getHTML"></mavon-editor>
     	<div class="img-upload">
 		    <form id='myform'>
 		    	<input class="input-img" type='file' name='myImg' id='myImg'/>
@@ -47,6 +47,7 @@
 		data(){
 			return {
 				value:'# hello',
+				content:'',
 				dialogFormVisible: false,
 				title:'',
 				cate:'',
@@ -64,6 +65,9 @@
 
 		},
 		methods: {
+			getHTML:function(value,render){
+				this.content = render;
+			},
 		    send:function(){
 		    	var that =this;
 		    	var myform=document.getElementById('myform');  
@@ -91,7 +95,7 @@
 		    	this.axios({
 	                url: 'http://127.0.0.1:3000/users/sub-article',
 	                method: 'post',
-	                data: {"title":this.title,"cateID":this.cate,"description":this.description,"content":this.value},
+	                data: {"title":this.title,"cateID":this.cate,"description":this.description,"content":this.content},
 	            }).then((res) => {
 	                console.log(res.data.status);
 	            })
