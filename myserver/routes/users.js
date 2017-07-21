@@ -7,7 +7,7 @@ var formidable = require('formidable'),
     domain = "http://localhost:3000";
 
 router.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -87,10 +87,15 @@ function getNowFormatDate() {
     return currentdate;
 } 
 
+function getInquire(){
+  return Math.random().toString(16).substring(3, 15);
+}
+
 router.post("/sub-article",function(req,res){ 
     var message = req.body;
     console.log(req.body);
     var newTime = getNowFormatDate();
+    var inquireID = getInquire();
     var messageColletion =  db.collection("article");
     messageColletion.insertOne({    //数据库插入数据
         title:message.title,
@@ -98,6 +103,7 @@ router.post("/sub-article",function(req,res){
         cateID:message.cateID,
         description:message.description,
         content:message.content,
+        inquire:inquireID,
     })
         .then(function(){
             res.json({      //返回json数据
@@ -112,9 +118,24 @@ router.post("/sub-article",function(req,res){
 
 router.get('/get-article', function(req, res) {
   let myDB = db.collection("article");	
-  myDB.find().toArray()
+  myDB.find().sort({'_id':-1}).toArray()
     .then(function(result) {
+      for(let item in result){
+        delete result[item].content;
+      }
       res.send(result);	
+    })
+    .catch(function(err){
+      throw err;
+    });
+});
+
+router.get('/get-content', function(req, res) {
+  let myDB = db.collection("article");  
+  console.log(req.query);
+  myDB.find(req.query).toArray()
+    .then(function(result) {
+      res.send(result); 
     })
     .catch(function(err){
       throw err;

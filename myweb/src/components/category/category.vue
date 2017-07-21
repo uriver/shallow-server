@@ -27,7 +27,7 @@
 	}
 </script>
 
-<style scoped src="../../../static/css/markd.css">
+<style scoped>
 /*	@import './static/css/markd.css'*/
 
 </style>
