@@ -16,7 +16,7 @@
 			getData:function(){
 				let that = this;
 				this.axios({
-					url:'http://127.0.0.1:3000/users/get-article',
+					url:'/users/get-article',
 					dataType:'json',
 					method: 'get',
 				}).then((res)=> {
