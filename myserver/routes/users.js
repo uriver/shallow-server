@@ -23,7 +23,7 @@ router.post('/img',function(req,res){
   res.header("Access-Control-Allow-Origin", "*");
   var form = new formidable.IncomingForm();
   form.encoding = 'utf-8';        //设置编辑
-  form.uploadDir = 'public' + AVATAR_UPLOAD_FOLDER;     //设置上传目录
+  form.uploadDir = 'dist' + AVATAR_UPLOAD_FOLDER;     //设置上传目录
   form.keepExtensions = true;     //保留后缀
   form.maxFieldsSize = 2 * 1024 * 1024;   //文件大小
 
@@ -93,7 +93,6 @@ function getInquire(){
 
 router.post("/sub-article",function(req,res){ 
     var message = req.body;
-    console.log(req.body);
     var newTime = getNowFormatDate();
     var inquireID = getInquire();
     var messageColletion =  db.collection("article");
@@ -116,6 +115,82 @@ router.post("/sub-article",function(req,res){
         })
 })
 
+router.post("/add-category",function(req,res){ 
+    var that = this;
+    var myDB =  db.collection("category");
+    var message = req.body;
+    var newTime = getNowFormatDate();
+    var cateID = 1;
+    myDB.insertOne({    //数据库插入数据
+        cateName:message.cateName,
+        time:newTime,
+        cateID:cateID,
+        articleNum:0,
+    })
+        .then(function(){
+            res.json({      //返回json数据
+                status: 0,
+                message: "提交成功"
+            })
+        })
+        .catch(function(err){
+            throw err;
+        })
+})
+
+/*
+router.post("/addCategory",function(req,res){ 
+    var myDB =  db.collection("category");
+    var message = req.body;
+    var cateID;  
+    //需要从数据库获得最大的cateID字段值
+    // 获取最大cateID操作
+    //…………
+    //获取到最大cateID后
+    myDB.insertOne({  
+        cateName:message.cateName,
+        cateID:cateID,
+        articleNum:0,
+    })
+        .then(function(){
+            res.json({  
+                status: 0,
+                message: "提交成功"
+            })
+        })
+        .catch(function(err){
+            throw err;
+        })
+})
+*/
+
+
+router.get("/get-categoryMes",function(req,res){ 
+    var myDB =  db.collection("category");
+    myDB.find().sort({'cateID':1}).toArray()
+    .then(function(result) {
+      res.send(result); 
+    })
+    .catch(function(err){
+      throw err;
+    });
+});
+
+router.post('/delete-cate', function(req, res) {
+  let myDB = db.collection("category");  
+  myDB.remove(req.body)
+    .then(function(result) {
+      res.json({      //返回json数据
+            status: 0,
+            message: "提交成功"
+        })
+    })
+    .catch(function(err){
+      throw err;
+    });
+});
+
+
 router.get('/get-article', function(req, res) {
   let myDB = db.collection("article");	
   myDB.find().sort({'_id':-1}).toArray()
@@ -129,6 +204,7 @@ router.get('/get-article', function(req, res) {
       throw err;
     });
 });
+
 
 router.get('/get-content', function(req, res) {
   let myDB = db.collection("article");  

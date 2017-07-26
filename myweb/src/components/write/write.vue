@@ -73,7 +73,7 @@
 		    	var myform=document.getElementById('myform');  
 			    var myData=new FormData(myform);  
 		    	this.axios({
-	                url: '/users/img',
+	                url: 'http://127.0.0.1:3000/users/img',
 	                method: 'post',
 	                data: myData,
 	                headers: { 'Content-Type': 'multipart/form-data' },
@@ -93,7 +93,7 @@
 		    		return;
 		    	}
 		    	this.axios({
-	                url: '/users/sub-article',
+	                url: 'http://127.0.0.1:3000/users/sub-article',
 	                method: 'post',
 	                data: {"title":this.title,"cateID":this.cate,"description":this.description,"content":this.content},
 	            }).then((res) => {
