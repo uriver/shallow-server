@@ -95,6 +95,15 @@ router.post("/sub-article",function(req,res){
     var message = req.body;
     var newTime = getNowFormatDate();
     var inquireID = getInquire();
+
+
+    var addArticleNum =  db.collection("category");
+    var findCate={};
+    findCate.cateID = parseInt(message.cateID);
+    console.log(findCate);
+    addArticleNum.update(findCate,{$inc:{articleNum:1}});
+
+
     var messageColletion =  db.collection("article");
     messageColletion.insertOne({    //数据库插入数据
         title:message.title,
@@ -145,37 +154,13 @@ router.post("/add-category",function(req,res){
           })
 })
 
-/*
-router.post("/addCategory",function(req,res){ 
-    var myDB =  db.collection("category");
-    var message = req.body;
-    var cateID;  
-    //需要从数据库获得最大的cateID字段值
-    // 获取最大cateID操作
-    //…………
-    //获取到最大cateID后
-    myDB.insertOne({  
-        cateName:message.cateName,
-        cateID:cateID,
-        articleNum:0,
-    })
-        .then(function(){
-            res.json({  
-                status: 0,
-                message: "提交成功"
-            })
-        })
-        .catch(function(err){
-            throw err;
-        })
-})
-*/
-
-
 router.get("/get-categoryMes",function(req,res){ 
     var myDB =  db.collection("category");
     myDB.find().sort({'cateID':1}).toArray()
     .then(function(result) {
+      for(let item in result){
+        delete result[item].content;
+      }
       res.send(result); 
     })
     .catch(function(err){
@@ -212,6 +197,46 @@ router.get('/get-article', function(req, res) {
     });
 });
 
+router.get('/get-article-by-title',function(req,res){
+  let myDB = db.collection("article");  
+  let inquireID = req.query.cateId;
+  let inquirePage = req.query.page;
+  let inquireData = {};
+  inquireData.cateID = inquireID;
+  if(inquireID == 0){
+    myDB.find().toArray().then(function(result) {
+      let num = result.length;
+      let startNum = inquirePage*8 - 8;
+      let endNum = startNum + 8;
+      if(endNum > num){ endNum = num };
+      let reData = result.slice(startNum,endNum);
+      for(let item in reData){
+        delete reData[item].content;
+      }
+      res.send(reData);
+    }).catch(function(err){
+      throw err;
+    });
+  }
+  else if(inquireID != 0){
+    console.log(inquireData);
+    // inquireData = {"cateID":"1"};
+    myDB.find(inquireData).toArray().then(function(result) {
+      console.log("11111111");
+      let num = result.length;
+      let startNum = inquirePage*8 - 8;
+      let endNum = startNum + 8;
+      if(endNum > num){ endNum = num };
+      let reData = result.slice(startNum,endNum);
+      for(let item in reData){
+        delete reData[item].content;
+      }
+      res.send(reData);
+    }).catch(function(err){
+      throw err;
+    });
+  }
+})
 
 router.get('/get-content', function(req, res) {
   let myDB = db.collection("article");  
