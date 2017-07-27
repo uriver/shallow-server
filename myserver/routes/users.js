@@ -116,26 +116,33 @@ router.post("/sub-article",function(req,res){
 })
 
 router.post("/add-category",function(req,res){ 
-    var that = this;
     var myDB =  db.collection("category");
     var message = req.body;
     var newTime = getNowFormatDate();
-    var cateID = 1;
-    myDB.insertOne({    //数据库插入数据
-        cateName:message.cateName,
-        time:newTime,
-        cateID:cateID,
-        articleNum:0,
-    })
-        .then(function(){
-            res.json({      //返回json数据
-                status: 0,
-                message: "提交成功"
-            })
-        })
-        .catch(function(err){
-            throw err;
-        })
+    myDB.find().sort({"cateID":-1}).limit(1).toArray().then(function(result){
+      let cateId;
+      if(result.length == 0){ cateId = 0; }
+      else{ cateId = result[0].cateID; }
+      cateId++ ;
+      console.log(cateId);
+      myDB.insertOne({    //数据库插入数据
+          cateName:message.cateName,
+          time:newTime,
+          cateID:cateId,
+          articleNum:0,
+      })
+          .then(function(){
+              res.json({      //返回json数据
+                  status: 0,
+                  message: "提交成功"
+              })
+          })
+          .catch(function(err){
+              throw err;
+          })
+    }).catch(function(err){
+              throw err;
+          })
 })
 
 /*
