@@ -39,7 +39,7 @@
 	        <template scope="scope">
 		        <el-button
 		          size="small"
-		          type="nomal"
+		          type="info"
 		          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 		        <el-button
 		          size="small"
@@ -85,8 +85,32 @@
 					that.cateData = res.data;
 				})
 			},
-			handleEdit:function(index){
+			changeCateName:function(){
 
+			},
+			handleEdit:function(index){
+				let cateID = this.cateData[index].cateID;
+				this.$prompt('请输入分类名', '提示', {
+		          confirmButtonText: '确定',
+		          cancelButtonText: '取消',
+		        }).then((obj) => {
+		          this.axios({
+		          	url: 'http://127.0.0.1:3000/users/change-cate',
+	                method: 'post',
+	                data: {"cateID":cateID,"newName":obj.value},
+	            	}).then(()=>{
+	            		this.getCateMes();
+	            		this.$message({
+			            type: 'success',
+			            message: '修改成功'
+			          });
+	            	})
+		        }).catch(() => {
+		          this.$message({
+		            type: 'info',
+		            message: '取消修改'
+		          });       
+		        });
 			},
 			handleDelete:function(index){
 				let cateID = this.cateData[index].cateID;
@@ -113,7 +137,6 @@
 		            message: '已取消删除'
 		          });          
 		        });
-				
 			},
 		}
 	}
@@ -125,5 +148,9 @@
 		border-bottom: 1px solid #e6e6e6;
 		margin-bottom: 10px;
 	}
-
+	.changeCate{
+		font-size: 17px;
+		font-weight: 500;
+		margin-right: 50px;
+	}
 </style>

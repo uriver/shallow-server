@@ -17,10 +17,10 @@
 				<br />
 			    <el-select v-model="cate" placeholder="请选择">
 				    <el-option
-				      v-for="item in category"
-				      :key="item.value"
-				      :label="item.label"
-				      :value="item.value">
+				      v-for="item in cateData"
+				      :key="item.cateName"
+				      :label="item.cateName"
+				      :value="item.cateID">
 				    </el-option>
 			    </el-select>
 			    <div style="height:30px;"></div>
@@ -52,17 +52,14 @@
 				title:'',
 				cate:'',
 				description:'',
-				category: [{
-		          value: '1',
-		          label: 'JavaScript'
-		        }, {
-		          value: '2',
-		          label: 'Node.js'
-		        }],
+				cateData: [],
 			}
 		},
 		computed: {
 
+		},
+		mounted(){
+			this.getCateMes();
 		},
 		methods: {
 			getHTML:function(value,render){
@@ -101,7 +98,16 @@
 	            })
 	    		this.dialogFormVisible = false;
 	    		this.$message('文章发表成功');
-		    }
+		    },
+		    getCateMes:function(){
+				let that = this;
+				this.axios({
+					url: 'http://127.0.0.1:3000/users/get-categoryMes',
+	                method: 'get',
+				}).then((res)=>{
+					that.cateData = res.data;
+				})
+			},
 		}
 	}
 </script>

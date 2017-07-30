@@ -168,6 +168,20 @@ router.get("/get-categoryMes",function(req,res){
     });
 });
 
+router.post('/change-cate', function(req, res) {
+  let myDB = db.collection("category");  
+  myDB.update({cateID:req.body.cateID},{$set:{cateName:req.body.newName}})
+    .then(function(result) {
+      res.json({      //返回json数据
+            status: 0,
+            message: "提交成功"
+        })
+    })
+    .catch(function(err){
+      throw err;
+    });
+});
+
 router.post('/delete-cate', function(req, res) {
   let myDB = db.collection("category");  
   myDB.remove(req.body)
