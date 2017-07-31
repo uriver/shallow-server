@@ -213,35 +213,26 @@ router.get('/get-article', function(req, res) {
 
 router.get('/get-article-by-title',function(req,res){
   let myDB = db.collection("article");  
-  let inquireID = req.query.cateId;
-  let inquirePage = req.query.page;
+  let inquireID = parseInt(req.query.cateId);
   let inquireData = {};
   inquireData.cateID = inquireID;
   if(inquireID == 0){
-    myDB.find().toArray().then(function(result) {
-      let num = result.length;
-      let startNum = inquirePage*8 - 8;
-      let endNum = startNum + 8;
-      if(endNum > num){ endNum = num };
-      let reData = result.slice(startNum,endNum);
+    myDB.find().sort({'_id':-1}).toArray().then(function(result) {
+      let reData = result;
       for(let item in reData){
         delete reData[item].content;
       }
+      // let returnMes = {};
+      // returnMes.data = reData;
+      // returnMes.page = allPage;
       res.send(reData);
     }).catch(function(err){
       throw err;
     });
   }
   else if(inquireID != 0){
-    console.log(inquireData);
-    // inquireData = {"cateID":"1"};
-    myDB.find(inquireData).toArray().then(function(result) {
-      console.log("11111111");
-      let num = result.length;
-      let startNum = inquirePage*8 - 8;
-      let endNum = startNum + 8;
-      if(endNum > num){ endNum = num };
-      let reData = result.slice(startNum,endNum);
+    myDB.find(inquireData).sort({'_id':-1}).toArray().then(function(result) {
+      let reData = result;
       for(let item in reData){
         delete reData[item].content;
       }
