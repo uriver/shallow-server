@@ -95,8 +95,6 @@ router.post("/sub-article",function(req,res){
     var message = req.body;
     var newTime = getNowFormatDate();
     var inquireID = getInquire();
-
-
     var addArticleNum =  db.collection("category");
     var findCate={};
     findCate.cateID = parseInt(message.cateID);
@@ -122,6 +120,34 @@ router.post("/sub-article",function(req,res){
         .catch(function(err){
             throw err;
         })
+})
+
+router.post("/sub-edit",function(req,res){
+    var message = req.body;
+    var myDB = db.collection("article");
+    var cateDB = db.collection("category");
+
+    myDB.find({inquire:message.inquire}).toArray().then(function(result){
+        cateDB.update({cateID:result[0].cateID},{$inc:{articleNum:-1}});
+        cateDB.update({cateID:message.cateID},{$inc:{articleNum:1}});
+    })
+
+    myDB.update({inquire:message.inquire},{$set:{
+        title:message.title,
+        description:message.description,
+        content:message.content,
+        cateID:message.cateID,
+      }
+    })
+    .then(function(){
+        res.json({      //返回json数据
+            status: 0,
+            message: "提交成功"
+        })
+    })
+    .catch(function(err){
+        throw err;
+    })
 })
 
 router.post("/add-category",function(req,res){ 

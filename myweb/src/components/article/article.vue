@@ -84,6 +84,10 @@
 				}
 				this.articleData = this.articles;
 			},
+			handleEdit:function(index){
+				let inquire = this.articleData[index].inquire;
+				this.$router.push({path:'/edit',query:{inquire:inquire}})
+			},
 			handleDelete:function(index){
 				let inquire = this.articleData[index].inquire;
 				let cateID = this.articleData[index].cateID;
