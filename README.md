@@ -1,13 +1,23 @@
 # Shllownight.com个人博客后台
-> 分为两个部分：myserver和myweb。mysever是后端，使用用express框架，myweb是前端，用的vue框架。  
+> www.shallownight.com网站的后端管理。  
 > 真正上线的时候要把myweb打包给myserver。
 
 ## 后台管理界面
-![](myweb/static/readme1.png)
+项目分为两个部分：myserver和myweb。  
 
-![](myweb/static/readme2.png)
+mysever是后端，使用用express框架，myweb是前端，用的vue框架。  
 
-后台管理应该由文章管理、分类管理、新建文章三部分组成。但是现在项目仍在开发中，只完成新建文章模块。
+### 文章编辑
+![文章编辑](myweb/static/article.gif)
+
+### 文章上传
+![文章上传](myweb/static/upload.gif)
+
+### 分类管理
+![分类管理](myweb/static/category.gif)
+
+### 文章管理
+![文章管理](myweb/static/edit.gif)
 
 项目使用Vue框架，可独立运行，但建议打包到Express框架中。
 
